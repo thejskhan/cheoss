@@ -1,16 +1,24 @@
 import { CELL_COLOR, CELL_SIZE, TEXT_OFFSET } from '../render/constants'
-import { RANKS, FILES, IBoard } from './constants'
+import { RANKS, FILES, FILES_I, RANKS_I, IBoard } from './constants'
 import type { TColor, TPosition, TSquare } from './types'
 
 export class Piece {
-    name: string
+    square: Square
     position: TPosition
-    color: TColor
-    image: HTMLImageElement
+    name: string
     x: number
     y: number
+    color: TColor
+    image: HTMLImageElement
     possibleMoves: TPosition[]
-    constructor(position: TPosition, name: string, x: number, y: number) {
+    constructor(
+        square: Square,
+        position: TPosition,
+        name: string,
+        x: number,
+        y: number
+    ) {
+        this.square = square
         this.position = position
         this.color = name.toLowerCase() === name ? 'b' : 'w'
         this.name = name
@@ -26,43 +34,79 @@ export class Piece {
 }
 
 export class Pawn extends Piece {
-    constructor(position: TPosition, name: string, x: number, y: number) {
-        super(position, name, x, y)
+    constructor(
+        square: Square,
+        position: TPosition,
+        name: string,
+        x: number,
+        y: number
+    ) {
+        super(square, position, name, x, y)
         this.image.src = `/assets/${this.color}p.svg`
     }
 }
 
 export class Knight extends Piece {
-    constructor(position: TPosition, name: string, x: number, y: number) {
-        super(position, name, x, y)
+    constructor(
+        square: Square,
+        position: TPosition,
+        name: string,
+        x: number,
+        y: number
+    ) {
+        super(square, position, name, x, y)
         this.image.src = `/assets/${this.color}n.svg`
     }
 }
 
 export class Bishop extends Piece {
-    constructor(position: TPosition, name: string, x: number, y: number) {
-        super(position, name, x, y)
+    constructor(
+        square: Square,
+        position: TPosition,
+        name: string,
+        x: number,
+        y: number
+    ) {
+        super(square, position, name, x, y)
         this.image.src = `/assets/${this.color}b.svg`
     }
 }
 
 export class Rook extends Piece {
-    constructor(position: TPosition, name: string, x: number, y: number) {
-        super(position, name, x, y)
+    constructor(
+        square: Square,
+        position: TPosition,
+        name: string,
+        x: number,
+        y: number
+    ) {
+        super(square, position, name, x, y)
         this.image.src = `/assets/${this.color}r.svg`
     }
 }
 
 export class Queen extends Piece {
-    constructor(position: TPosition, name: string, x: number, y: number) {
-        super(position, name, x, y)
+    constructor(
+        square: Square,
+        position: TPosition,
+        name: string,
+        x: number,
+        y: number
+    ) {
+        super(square, position, name, x, y)
         this.image.src = `/assets/${this.color}q.svg`
     }
 }
 
 export class King extends Piece {
-    constructor(position: TPosition, name: string, x: number, y: number) {
-        super(position, name, x, y)
+    constructor(
+        square: Square,
+        position: TPosition,
+        name: string,
+        x: number,
+        y: number
+    ) {
+        super(square, position, name, x, y)
         this.image.src = `/assets/${this.color}k.svg`
     }
 }
@@ -90,27 +134,63 @@ export class Square {
         switch (piece) {
             case 'p':
             case 'P':
-                this.piece = new Pawn(this.position, piece, this.x, this.y)
+                this.piece = new Pawn(
+                    this,
+                    this.position,
+                    piece,
+                    this.x,
+                    this.y
+                )
                 break
             case 'n':
             case 'N':
-                this.piece = new Knight(this.position, piece, this.x, this.y)
+                this.piece = new Knight(
+                    this,
+                    this.position,
+                    piece,
+                    this.x,
+                    this.y
+                )
                 break
             case 'b':
             case 'B':
-                this.piece = new Bishop(this.position, piece, this.x, this.y)
+                this.piece = new Bishop(
+                    this,
+                    this.position,
+                    piece,
+                    this.x,
+                    this.y
+                )
                 break
             case 'r':
             case 'R':
-                this.piece = new Rook(this.position, piece, this.x, this.y)
+                this.piece = new Rook(
+                    this,
+                    this.position,
+                    piece,
+                    this.x,
+                    this.y
+                )
                 break
             case 'q':
             case 'Q':
-                this.piece = new Queen(this.position, piece, this.x, this.y)
+                this.piece = new Queen(
+                    this,
+                    this.position,
+                    piece,
+                    this.x,
+                    this.y
+                )
                 break
             case 'k':
             case 'K':
-                this.piece = new King(this.position, piece, this.x, this.y)
+                this.piece = new King(
+                    this,
+                    this.position,
+                    piece,
+                    this.x,
+                    this.y
+                )
                 break
         }
     }
@@ -133,6 +213,7 @@ export class Square {
 
 export class Engine {
     board: Square[][]
+
     constructor() {
         this.board = FILES.map((file, column) =>
             RANKS.map((rank, row) => {
@@ -145,5 +226,31 @@ export class Engine {
                 )
             })
         )
+
+        // this.move()
     }
+
+    // STUPID IMPLEMENTATION
+    // TODO: REFACTOR FOR SMART IMPLEMENTATION
+    // move() {
+    //     const from = 'e2'
+    //     const to = 'e4'
+
+    //     const e2Square = this.board.find(
+    //         (_, index) => FILES_I[from.charAt(0)] === index
+    //     )[RANKS_I[from.charAt(1)]]
+
+    //     const e2Piece = e2Square.piece
+
+    //     const e4Square = this.board.find(
+    //         (_, index) => FILES_I[to.charAt(0)] === index
+    //     )[RANKS_I[to.charAt(1)]]
+
+    //     e2Piece.x = e4Square.x
+    //     e2Piece.y = e4Square.y
+
+    //     e4Square.piece = e2Piece
+
+    //     console.log(this.board)
+    // }
 }
