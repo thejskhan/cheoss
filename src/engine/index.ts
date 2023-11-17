@@ -43,7 +43,6 @@ export class Piece {
 export class Pawn extends Piece {
     constructor(position: TPosition, name: string, x: number, y: number) {
         super(position, name, x, y)
-        this.image = new Image()
         this.image.src = `/assets/${this.color}p.svg`
     }
 }
@@ -51,7 +50,6 @@ export class Pawn extends Piece {
 export class Knight extends Piece {
     constructor(position: TPosition, name: string, x: number, y: number) {
         super(position, name, x, y)
-        this.image = new Image()
         this.image.src = `/assets/${this.color}n.svg`
     }
 }
@@ -59,7 +57,6 @@ export class Knight extends Piece {
 export class Bishop extends Piece {
     constructor(position: TPosition, name: string, x: number, y: number) {
         super(position, name, x, y)
-        this.image = new Image()
         this.image.src = `/assets/${this.color}b.svg`
     }
 }
@@ -67,7 +64,6 @@ export class Bishop extends Piece {
 export class Rook extends Piece {
     constructor(position: TPosition, name: string, x: number, y: number) {
         super(position, name, x, y)
-        this.image = new Image()
         this.image.src = `/assets/${this.color}r.svg`
     }
 }
@@ -75,7 +71,6 @@ export class Rook extends Piece {
 export class Queen extends Piece {
     constructor(position: TPosition, name: string, x: number, y: number) {
         super(position, name, x, y)
-        this.image = new Image()
         this.image.src = `/assets/${this.color}q.svg`
     }
 }
@@ -83,7 +78,6 @@ export class Queen extends Piece {
 export class King extends Piece {
     constructor(position: TPosition, name: string, x: number, y: number) {
         super(position, name, x, y)
-        this.image = new Image()
         this.image.src = `/assets/${this.color}k.svg`
     }
 }
