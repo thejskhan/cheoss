@@ -1,3 +1,4 @@
+import { CELL_COLOR, CELL_SIZE } from '../render/constants'
 import { RANKS, FILES, IBoard } from './constants'
 import type { TColor, TPosition, TSquare } from './types'
 
@@ -41,17 +42,37 @@ export class Square {
     square: TSquare
     piece: string | undefined
     image: HTMLImageElement | undefined
-    constructor(position: TPosition, cellColor: TColor, piece: string) {
+    x: number
+    y: number
+    constructor(
+        position: TPosition,
+        cellColor: TColor,
+        piece: string,
+        x: number,
+        y: number
+    ) {
         this.position = position
         this.cellColor = cellColor
         this.square = `${position[0]}${position[1]}`
         this.piece = piece
         this.image = piece ? new Image() : undefined
+        this.x = x
+        this.y = y
 
         if (this.image) {
             this.image.src = `/assets/${
                 this.piece.toLowerCase() === piece ? 'b' : 'w'
             }${piece.toLowerCase()}.svg`
+        }
+    }
+
+    draw(c: CanvasRenderingContext2D) {
+        c.fillStyle =
+            this.cellColor === 'w' ? CELL_COLOR.light : CELL_COLOR.dark
+        c.fillRect(this.x, this.y, CELL_SIZE, CELL_SIZE)
+
+        if (this.image) {
+            c.drawImage(this.image!, this.x, this.y, CELL_SIZE, CELL_SIZE)
         }
     }
 }
@@ -64,7 +85,9 @@ export class Engine {
                 return new Square(
                     [file, rank],
                     row % 2 === column % 2 ? 'w' : 'b',
-                    IBoard[column][row]
+                    IBoard[column][row],
+                    CELL_SIZE * column,
+                    CELL_SIZE * row
                 )
             })
         )

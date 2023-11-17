@@ -11,6 +11,9 @@ dependencies:
   fen-chess-board:
     specifier: ^2.0.5
     version: 2.0.5
+  lodash:
+    specifier: ^4.17.21
+    version: 4.17.21
   solid-js:
     specifier: ^1.7.8
     version: 1.7.8
@@ -19,6 +22,9 @@ devDependencies:
   '@types/chess.js':
     specifier: ^0.13.7
     version: 0.13.7
+  '@types/lodash':
+    specifier: ^4.14.201
+    version: 4.14.201
   autoprefixer:
     specifier: ^10.4.16
     version: 10.4.16(postcss@8.4.31)
@@ -658,6 +664,10 @@ packages:
     resolution: {integrity: sha512-o9TeeBdFXelFJXOD9+6sT6bbpBvWG0ZbpOnlIyUNXBjewh7xoFS0+BifGc71T45D5E952io3i8dDsaN6hnLaxw==}
     dev: true
 
+  /@types/lodash@4.14.201:
+    resolution: {integrity: sha512-y9euML0cim1JrykNxADLfaG0FgD1g/yTHwUs/Jg9ZIU7WKj2/4IW9Lbb1WZbvck78W/lfGXFfe+u2EGfIJXdLQ==}
+    dev: true
+
   /ansi-styles@3.2.1:
     resolution: {integrity: sha512-VT0ZI6kZRdTh8YyJw3SMbYm/u+NqfsAxEpWO0Pf9sq8/e94WxxOpPKx9FR1FlyCtOVDNOQ+8ntlqFxiRc+r5qA==}
     engines: {node: '>=4'}
@@ -1060,6 +1070,10 @@ packages:
   /lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
     dev: true
+
+  /lodash@4.17.21:
+    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+    dev: false
 
   /lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==}
