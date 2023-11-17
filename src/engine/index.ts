@@ -2,21 +2,6 @@ import { CELL_COLOR, CELL_SIZE, TEXT_OFFSET } from '../render/constants'
 import { RANKS, FILES, IBoard } from './constants'
 import type { TColor, TPosition, TSquare } from './types'
 
-// type TState = {
-//     board: TPosition[]
-//     whiteToPlay: boolean
-//     blackCastling: boolean
-//     whiteCastling: boolean
-//     whiteInCheck: boolean
-//     blackInCheck: boolean
-//     gameEnded: boolean
-// }
-
-// EXPECTED BOARD
-// A8, B8, C8...
-// ...
-// A1, B1, C1...
-
 export class Piece {
     name: string
     position: TPosition
