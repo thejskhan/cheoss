@@ -7,7 +7,7 @@ export type TFiles = typeof FILES
 
 // prettier-ignore
 export const IBoard = unzip([
-    ['r', 'n', 'r', 'q', 'k', 'b', 'n', 'r'],
+    ['r', 'n', 'b', 'q', 'k', 'b', 'n', 'r'],
     ['p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'],
     ['' , '' , '' , '' , '' , '' , '' , '' ],
     ['' , '' , '' , '' , '' , '' , '' , '' ],
