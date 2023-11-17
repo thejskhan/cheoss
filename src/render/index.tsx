@@ -7,6 +7,13 @@ function Canvas() {
 
     onMount(() => {
         if (!canvasRef) return
+        let mouseX = 0
+        let mouseY = 0
+        canvasRef.addEventListener('click', (e) => {
+            mouseX = e.offsetX
+            mouseY = e.offsetY
+            console.log(mouseX, mouseY)
+        })
         const ctx = canvasRef.getContext('2d')
 
         if (!ctx) return
@@ -14,7 +21,7 @@ function Canvas() {
 
         function loop(time: number) {
             frame = requestAnimationFrame(loop)
-            render(ctx!, time)
+            render(ctx!, mouseX, mouseY, time)
         }
 
         onCleanup(() => cancelAnimationFrame(frame))

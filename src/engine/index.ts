@@ -120,19 +120,22 @@ export class Square {
             this.cellColor === 'w' ? CELL_COLOR.light : CELL_COLOR.dark
         c.fillRect(this.x, this.y, CELL_SIZE, CELL_SIZE)
 
-        c.fillText(this.name, this.x + TEXT_OFFSET, this.y - TEXT_OFFSET)
+        c.fillStyle =
+            this.cellColor === 'w' ? CELL_COLOR.dark : CELL_COLOR.light
 
-        if (this.piece) {
-            this.piece.draw(c)
-        }
+        c.fillText(
+            this.name,
+            this.x + TEXT_OFFSET,
+            this.y + CELL_SIZE - TEXT_OFFSET
+        )
     }
 }
 
 export class Engine {
     board: Square[][]
     constructor() {
-        this.board = FILES.map((file, row) =>
-            RANKS.map((rank, column) => {
+        this.board = FILES.map((file, column) =>
+            RANKS.map((rank, row) => {
                 return new Square(
                     [file, rank],
                     row % 2 === column % 2 ? 'w' : 'b',
