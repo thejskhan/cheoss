@@ -1,6 +1,7 @@
-import { TPosition, TSquare } from './types'
+import { FILES_INDEX, RANKS_INDEX } from './constants'
+import type { TPosition, TSquare } from './types'
 
-// HELPER FUNCTIONS
-export const getSquareName = (squareName: TSquare) => {
-    return squareName.split('') as TPosition
+export const getPositionIndexes = (squareName: TSquare) => {
+    const [file, rank] = squareName.split('') as TPosition
+    return [FILES_INDEX[file], RANKS_INDEX[rank]]
 }

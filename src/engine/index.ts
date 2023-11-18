@@ -1,7 +1,7 @@
 import { CELL_COLOR, CELL_SIZE, TEXT_OFFSET } from '../render/constants'
-import { RANKS, FILES, FILES_INDEX, RANKS_INDEX, IBoard } from './constants'
+import { RANKS, FILES, IBoard } from './constants'
+import { getPositionIndexes } from './helpers'
 import type { TColor, TPosition, TSquare } from './types'
-import { getSquareName } from './helpers'
 
 export class Piece {
     square: Square
@@ -228,36 +228,23 @@ export class Engine {
             })
         )
 
-        // this.move()
-        this.findSquare('e4')
+        this.move('e2', 'e4')
     }
 
     findSquare(squareName: TSquare) {
-        const [file, rank] = getSquareName(squareName)
-        return this.board[FILES_INDEX[file]][RANKS_INDEX[rank]]
+        const [fileIndex, rankIndex] = getPositionIndexes(squareName)
+        return this.board[fileIndex][rankIndex]
     }
 
-    // STUPID IMPLEMENTATION
-    // TODO: REFACTOR FOR SMART IMPLEMENTATION
-    // move() {
-    //     const from = 'e2'
-    //     const to = 'e4'
+    move(from: TSquare, to: TSquare) {
+        const fromSquare = this.findSquare(from)
+        const toSquare = this.findSquare(to)
 
-    //     const e2Square = this.board.find(
-    //         (_, index) => FILES_I[from.charAt(0)] === index
-    //     )[RANKS_I[from.charAt(1)]]
-
-    //     const e2Piece = e2Square.piece
-
-    //     const e4Square = this.board.find(
-    //         (_, index) => FILES_I[to.charAt(0)] === index
-    //     )[RANKS_I[to.charAt(1)]]
-
-    //     e2Piece.x = e4Square.x
-    //     e2Piece.y = e4Square.y
-
-    //     e4Square.piece = e2Piece
-
-    //     console.log(this.board)
-    // }
+        if (fromSquare.piece) {
+            toSquare.piece = fromSquare.piece
+            fromSquare.piece = undefined
+            toSquare.piece.x = toSquare.x
+            toSquare.piece.y = toSquare.y
+        }
+    }
 }
