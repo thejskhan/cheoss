@@ -15,7 +15,7 @@ export const COLORS = {
     },
 }
 
-export const CANVAS_SIZE = 640
+export const CANVAS_SIZE = 800
 
 export const BOARD_SIZE = 8
 
@@ -27,11 +27,11 @@ export const TEXT_OFFSET = 12
 
 export const BOARDEdges = {
     files: FILES.map((file, i) => ({
-        edge: 640 / 8 + i * CELL_SIZE,
+        edge: CANVAS_SIZE / BOARD_SIZE + i * CELL_SIZE,
         name: file,
     })),
     ranks: RANKS.map((rank, i) => ({
-        edge: 640 / 8 + i * CELL_SIZE,
+        edge: CANVAS_SIZE / BOARD_SIZE + i * CELL_SIZE,
         name: rank,
     })),
 }

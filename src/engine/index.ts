@@ -245,8 +245,6 @@ export class Engine {
                 )
             })
         )
-
-        this.move('e2', 'e4')
     }
 
     findSquare(squareName: TSquare) {
@@ -265,6 +263,7 @@ export class Engine {
 
     resetUserState() {
         this.resetColor()
+        this.userState = IUserState
     }
 
     highlightSquare(squareName: TSquare) {
@@ -275,7 +274,16 @@ export class Engine {
 
     select(e: MouseEvent) {
         if (this.userState.selected) {
+            console.log(
+                this.userState.selected,
+                getSquareFromMouse(e.offsetX, e.offsetY)
+            )
+            this.move(
+                this.userState.selected,
+                getSquareFromMouse(e.offsetX, e.offsetY)
+            )
             this.resetUserState()
+            return
         }
         this.userState = {
             mouseX: e.offsetX,
@@ -289,6 +297,8 @@ export class Engine {
     move(from: TSquare, to: TSquare) {
         const fromSquare = this.findSquare(from)
         const toSquare = this.findSquare(to)
+
+        if (fromSquare === toSquare) return
 
         if (fromSquare.piece) {
             toSquare.piece = fromSquare.piece
