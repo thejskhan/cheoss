@@ -1,19 +1,29 @@
 import { onCleanup, onMount } from 'solid-js'
 import render from './render'
-import { CANVAS_SIZE } from './constants'
+import { CANVAS_SIZE } from '../engine/constants/interface'
+import { Engine } from '../engine'
+
+const engine = new Engine()
 
 function Canvas() {
     let canvasRef: HTMLCanvasElement | undefined
 
     onMount(() => {
         if (!canvasRef) return
-        let mouseX = 0
-        let mouseY = 0
-        canvasRef.addEventListener('click', (e) => {
-            mouseX = e.offsetX
-            mouseY = e.offsetY
-            console.log(mouseX, mouseY)
-        })
+        const handleClick = (e: MouseEvent) => {
+            engine.select(e)
+        }
+
+        const handleKeyPress = (e: KeyboardEvent) => {
+            if (e.isComposing || e.key === 'Escape') {
+                engine.resetUserState()
+                return
+            }
+        }
+
+        canvasRef.addEventListener('click', handleClick)
+        window.addEventListener('keydown', handleKeyPress)
+
         const ctx = canvasRef.getContext('2d')
 
         if (!ctx) return
@@ -21,10 +31,17 @@ function Canvas() {
 
         function loop(time: number) {
             frame = requestAnimationFrame(loop)
-            render(ctx!, mouseX, mouseY, time)
+            render(ctx!, engine, time)
         }
 
-        onCleanup(() => cancelAnimationFrame(frame))
+        onCleanup(() => {
+            if (canvasRef) {
+                canvasRef.removeEventListener('click', handleClick)
+                window.removeEventListener('keydown', handleKeyPress)
+            }
+
+            cancelAnimationFrame(frame)
+        })
     })
 
     return (

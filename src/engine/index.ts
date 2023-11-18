@@ -1,7 +1,12 @@
-import { CELL_COLOR, CELL_SIZE, TEXT_OFFSET } from '../render/constants'
-import { RANKS, FILES, IBoard } from './constants'
-import { getPositionIndexes } from './helpers'
-import type { TColor, TPosition, TSquare } from './types'
+import {
+    COLORS,
+    CELL_SIZE,
+    TEXT_OFFSET,
+    BORDER_SIZE,
+} from './constants/interface'
+import { RANKS, FILES, IBoard, IUserState } from './constants/engine'
+import { getPositionIndexes, getSquareFromMouse } from './helpers/helpers'
+import type { TColor, TPosition, TSquare, TUserState } from './helpers/types'
 
 export class Piece {
     square: Square
@@ -119,6 +124,7 @@ export class Square {
     piece: Piece | undefined
     x: number
     y: number
+    isHighlighted: boolean
     constructor(
         position: TPosition,
         cellColor: TColor,
@@ -131,6 +137,7 @@ export class Square {
         this.name = `${position[0]}${position[1]}`
         this.x = x
         this.y = y
+        this.isHighlighted = false
 
         switch (piece) {
             case 'p':
@@ -197,12 +204,21 @@ export class Square {
     }
 
     draw(c: CanvasRenderingContext2D) {
-        c.fillStyle =
-            this.cellColor === 'w' ? CELL_COLOR.light : CELL_COLOR.dark
+        c.fillStyle = COLORS[this.cellColor].background
         c.fillRect(this.x, this.y, CELL_SIZE, CELL_SIZE)
 
-        c.fillStyle =
-            this.cellColor === 'w' ? CELL_COLOR.dark : CELL_COLOR.light
+        if (this.isHighlighted) {
+            c.lineWidth = BORDER_SIZE
+            c.strokeStyle = COLORS['highlight'].background
+            c.strokeRect(
+                this.x + BORDER_SIZE / 2,
+                this.y + BORDER_SIZE / 2,
+                CELL_SIZE - BORDER_SIZE,
+                CELL_SIZE - BORDER_SIZE
+            )
+        }
+
+        c.fillStyle = COLORS[this.cellColor].foreground
 
         c.fillText(
             this.name,
@@ -214,8 +230,10 @@ export class Square {
 
 export class Engine {
     board: Square[][]
+    userState: TUserState
 
     constructor() {
+        this.userState = IUserState
         this.board = FILES.map((file, column) =>
             RANKS.map((rank, row) => {
                 return new Square(
@@ -234,6 +252,38 @@ export class Engine {
     findSquare(squareName: TSquare) {
         const [fileIndex, rankIndex] = getPositionIndexes(squareName)
         return this.board[fileIndex][rankIndex]
+    }
+
+    resetColor() {
+        this.board.forEach((file, column) =>
+            file.forEach((square, row) => {
+                square.cellColor = row % 2 === column % 2 ? 'w' : 'b'
+                square.isHighlighted = false
+            })
+        )
+    }
+
+    resetUserState() {
+        this.resetColor()
+    }
+
+    highlightSquare(squareName: TSquare) {
+        this.resetColor()
+        const square = this.findSquare(squareName)
+        square.isHighlighted = true
+    }
+
+    select(e: MouseEvent) {
+        if (this.userState.selected) {
+            this.resetUserState()
+        }
+        this.userState = {
+            mouseX: e.offsetX,
+            mouseY: e.offsetY,
+            selected: getSquareFromMouse(e.offsetX, e.offsetY),
+        }
+        this.highlightSquare(getSquareFromMouse(e.offsetX, e.offsetY))
+        return
     }
 
     move(from: TSquare, to: TSquare) {
