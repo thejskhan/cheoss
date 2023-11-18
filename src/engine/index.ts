@@ -1,6 +1,7 @@
 import { CELL_COLOR, CELL_SIZE, TEXT_OFFSET } from '../render/constants'
-import { RANKS, FILES, FILES_I, RANKS_I, IBoard } from './constants'
+import { RANKS, FILES, FILES_INDEX, RANKS_INDEX, IBoard } from './constants'
 import type { TColor, TPosition, TSquare } from './types'
+import { getSquareName } from './helpers'
 
 export class Piece {
     square: Square
@@ -218,7 +219,7 @@ export class Engine {
         this.board = FILES.map((file, column) =>
             RANKS.map((rank, row) => {
                 return new Square(
-                    [file, rank],
+                    [file, rank] as TPosition,
                     row % 2 === column % 2 ? 'w' : 'b',
                     IBoard[column][row],
                     CELL_SIZE * column,
@@ -228,6 +229,12 @@ export class Engine {
         )
 
         // this.move()
+        this.findSquare('e4')
+    }
+
+    findSquare(squareName: TSquare) {
+        const [file, rank] = getSquareName(squareName)
+        return this.board[FILES_INDEX[file]][RANKS_INDEX[rank]]
     }
 
     // STUPID IMPLEMENTATION

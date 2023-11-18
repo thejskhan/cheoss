@@ -2,7 +2,10 @@ import { unzip } from 'lodash'
 export const RANKS = [8, 7, 6, 5, 4, 3, 2, 1] as const
 export const FILES = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'] as const
 
-export const RANKS_I = {
+export type TRanks = typeof RANKS
+export type TFiles = typeof FILES
+
+export const RANKS_INDEX = {
     8: 0,
     7: 1,
     6: 2,
@@ -11,9 +14,9 @@ export const RANKS_I = {
     3: 5,
     2: 6,
     1: 7,
-} as const
+} as Record<TRanks[number], number>
 
-export const FILES_I = {
+export const FILES_INDEX = {
     a: 0,
     b: 1,
     c: 2,
@@ -22,10 +25,7 @@ export const FILES_I = {
     f: 5,
     g: 6,
     h: 7,
-} as const
-
-export type TRanks = typeof RANKS
-export type TFiles = typeof FILES
+} as Record<TFiles[number], number>
 
 // prettier-ignore
 export const IBoard = unzip([
