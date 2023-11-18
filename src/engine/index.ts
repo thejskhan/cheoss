@@ -1,3 +1,5 @@
+import { isEqual } from 'lodash'
+
 import {
     COLORS,
     CELL_SIZE,
@@ -17,6 +19,7 @@ export class Piece {
     color: TColor
     image: HTMLImageElement
     possibleMoves: TPosition[]
+    hasMoved: boolean
     constructor(
         square: Square,
         position: TPosition,
@@ -32,6 +35,7 @@ export class Piece {
         this.x = x
         this.y = y
         this.possibleMoves = []
+        this.hasMoved = false
     }
 
     draw(c: CanvasRenderingContext2D) {
@@ -49,6 +53,21 @@ export class Pawn extends Piece {
     ) {
         super(square, position, name, x, y)
         this.image.src = `/assets/${this.color}p.svg`
+        this.updateMoves()
+    }
+
+    updateMoves() {
+        this.possibleMoves = []
+        const a = this.hasMoved ? 1 : 2
+        for (let i = 1; i <= a; i++) {
+            const diff = this.color === 'w' ? i : -i
+            if (this.position[1] + diff < 8) {
+                this.possibleMoves.push([
+                    this.position[0],
+                    this.position[1] + diff,
+                ])
+            }
+        }
     }
 }
 
@@ -267,12 +286,12 @@ export class Engine {
     }
 
     highlightSquare(squareName: TSquare) {
-        this.resetColor()
         const square = this.findSquare(squareName)
         square.isHighlighted = true
     }
 
     select(e: MouseEvent) {
+        this.resetColor()
         const clickedSquare = getSquareFromMouse(e.offsetX, e.offsetY)
         if (this.userState.selectedSquare) {
             const fromSquare = this.userState.selectedSquare
@@ -280,6 +299,14 @@ export class Engine {
             this.move(fromSquare, toSquare)
             this.resetUserState()
             return
+        }
+
+        const a = this.findSquare(clickedSquare)
+        if (a.piece) {
+            a.piece.possibleMoves.forEach((position) => {
+                this.highlightSquare(`${position[0]}${position[1]}`)
+            })
+            console.log(a.piece.possibleMoves)
         }
         this.userState = {
             mouseX: e.offsetX,
@@ -294,13 +321,33 @@ export class Engine {
         const fromSquare = this.findSquare(from)
         const toSquare = this.findSquare(to)
 
+        // RULE: CAN'T MOVE TO SAME SQUARE
         if (fromSquare === toSquare) return
 
         if (fromSquare.piece) {
+            if (
+                toSquare.piece &&
+                // RULE: CAN'T TAKE OWN PIECES
+                // RULE: CAN'T MOVE IF NOT IN MOVELIST
+                (fromSquare.piece.color === toSquare.piece.color ||
+                    !fromSquare.piece.possibleMoves.some((position) =>
+                        isEqual(toSquare.position, position)
+                    ))
+            )
+                return
+            // PAWN can't take what's in front
+            if (fromSquare.piece instanceof Pawn && toSquare.piece) return
+
             toSquare.piece = fromSquare.piece
             fromSquare.piece = undefined
             toSquare.piece.x = toSquare.x
             toSquare.piece.y = toSquare.y
+            toSquare.piece.position = toSquare.position
+            toSquare.piece.hasMoved = true
+            if (toSquare.piece instanceof Pawn) {
+                console.log('I was run')
+                toSquare.piece.updateMoves()
+            }
         }
     }
 }
