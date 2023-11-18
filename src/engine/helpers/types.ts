@@ -14,5 +14,5 @@ export type TPosition = SplitPosition<TSquare>
 export type TUserState = {
     mouseX: number | undefined
     mouseY: number | undefined
-    selected: TSquare | undefined
+    selectedSquare: TSquare | undefined
 }

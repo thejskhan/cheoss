@@ -44,5 +44,5 @@ export const IBoard = unzip([
 export const IUserState = {
     mouseX: 0,
     mouseY: 0,
-    selected: undefined,
+    selectedSquare: undefined,
 } as TUserState

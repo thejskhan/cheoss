@@ -273,24 +273,20 @@ export class Engine {
     }
 
     select(e: MouseEvent) {
-        if (this.userState.selected) {
-            console.log(
-                this.userState.selected,
-                getSquareFromMouse(e.offsetX, e.offsetY)
-            )
-            this.move(
-                this.userState.selected,
-                getSquareFromMouse(e.offsetX, e.offsetY)
-            )
+        const clickedSquare = getSquareFromMouse(e.offsetX, e.offsetY)
+        if (this.userState.selectedSquare) {
+            const fromSquare = this.userState.selectedSquare
+            const toSquare = clickedSquare
+            this.move(fromSquare, toSquare)
             this.resetUserState()
             return
         }
         this.userState = {
             mouseX: e.offsetX,
             mouseY: e.offsetY,
-            selected: getSquareFromMouse(e.offsetX, e.offsetY),
+            selectedSquare: getSquareFromMouse(e.offsetX, e.offsetY),
         }
-        this.highlightSquare(getSquareFromMouse(e.offsetX, e.offsetY))
+        this.highlightSquare(clickedSquare)
         return
     }
 
